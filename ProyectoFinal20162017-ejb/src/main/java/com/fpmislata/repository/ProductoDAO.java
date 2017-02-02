@@ -27,6 +27,25 @@ public class ProductoDAO implements ProductoDAOLocal {
         return lista;
     }
     
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @Override
+    public Producto findProductoById(Producto producto) {
+        producto = em.find(Producto.class, producto.getId());
+        return producto;
+    }
+    
+    @Override
+    public void addProducto(Producto producto) {
+        em.persist(producto);
+    }
+    
+    @Override
+    public void updateProducto(Producto producto) {
+        em.merge(producto);
+    }
+    
+    @Override
+    public void deleteProducto(Producto producto) {
+        producto = findProductoById(producto);
+        em.remove(producto);
+    }
 }

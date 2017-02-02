@@ -43,4 +43,34 @@ public class ClienteService implements ClienteServiceLocal {
             return null;
         }
     }
+    
+    @Override
+    public void addCliente(Cliente cliente) {
+        try {
+            clienteDAO.addCliente(cliente);
+        } catch(Exception e) {
+            contexto.setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void updateCliente(Cliente cliente) {
+        try {
+            clienteDAO.updateCliente(cliente);
+        } catch(Exception e) {
+            contexto.setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void deleteCliente(Cliente cliente) {
+        try {
+            clienteDAO.deleteCliente(cliente);
+        } catch(Exception e) {
+            contexto.setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
 }

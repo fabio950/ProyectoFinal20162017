@@ -10,4 +10,10 @@ public interface ClienteDAOLocal {
     List listClientes();
 
     Cliente findClienteById(Cliente cliente);
+    
+    void addCliente(Cliente cliente);
+    
+    void updateCliente(Cliente cliente);
+    
+    void deleteCliente(Cliente cliente);
 }

@@ -38,21 +38,51 @@ public class CategoriaServiceREST {
     @GET
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Categorias/FindById/{id}")
+    @Path("/Categoria/FindById/{id}")
     public Categoria findCategoriaById(@PathParam("id") int id) {
-        Categoria c = new Categoria();
-        c.setId(id);
-        c = categoriaService.findCategoriaById(c);
-        return c;
+        Categoria categoria = new Categoria();
+        categoria.setId(id);
+        categoria = categoriaService.findCategoriaById(categoria);
+        return categoria;
     }
 
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Categorias/add")
+    @Path("/Categoria/add")
     public Response addCategoria(Categoria categoria) {
         try {
             categoriaService.addCategoria(categoria);
+            return Response.ok().entity(categoria).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+        }
+    }
+    
+    @POST
+    @Produces("application/json;charset=UTF-8")
+    @Consumes("application/json;charset=UTF-8")
+    @Path("/Categoria/update/{id}")
+    public Response updateCategoria(@PathParam("id") int id) {
+        try {
+            Categoria categoria = new Categoria();
+            categoria.setId(id);
+            categoriaService.updateCategoria(categoria);
+            return Response.ok().entity(categoria).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+        }
+    }
+    
+    @POST
+    @Produces("application/json;charset=UTF-8")
+    @Consumes("application/json;charset=UTF-8")
+    @Path("/Categoria/delete")
+    public Response deleteCategoria(Categoria categoria) {
+        try {
+            categoriaService.deleteCategoria(categoria);
             return Response.ok().entity(categoria).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         } catch (Exception ex) {
             ex.printStackTrace();

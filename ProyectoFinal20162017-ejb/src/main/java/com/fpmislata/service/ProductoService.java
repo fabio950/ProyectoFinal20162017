@@ -5,6 +5,7 @@
  */
 package com.fpmislata.service;
 
+import com.fpmislata.domain.Producto;
 import com.fpmislata.repository.ProductoDAOLocal;
 import java.util.List;
 import javax.annotation.Resource;
@@ -36,6 +37,44 @@ public class ProductoService implements ProductoServiceLocal {
         }
     }
     
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @Override
+    public Producto findProductoById(Producto producto) {
+        try {
+            return productoDAO.findProductoById(producto);
+        } catch(Exception e) {
+            contexto.setRollbackOnly();
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    @Override
+    public void addProducto(Producto producto) {
+        try {
+            productoDAO.addProducto(producto);
+        } catch(Exception e) {
+            contexto.setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void updateProducto(Producto producto) {
+        try {
+            productoDAO.updateProducto(producto);
+        } catch(Exception e) {
+            contexto.setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
+    
+    @Override
+    public void deleteProducto(Producto producto) {
+        try {
+            productoDAO.deleteProducto(producto);
+        } catch(Exception e) {
+            contexto.setRollbackOnly();
+            e.printStackTrace();
+        }
+    }
 }

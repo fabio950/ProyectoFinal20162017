@@ -6,6 +6,8 @@
 package com.fpmislata.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
@@ -32,11 +34,16 @@ public class Categoria implements Serializable {
     @Column(nullable = false, length = 50)
     private String nombre;
 
+    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Producto> productos;
+    
     public Categoria() {
+        productos = new HashSet<Producto>();
     }
 
     public Categoria(String nombre) {
         this.nombre = nombre;
+        productos = new HashSet<Producto>();
     }
 
     public int getId() {
@@ -55,32 +62,11 @@ public class Categoria implements Serializable {
         this.nombre = nombre;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        return hash;
+    public Set<Producto> getProductos() {
+        return productos;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Categoria other = (Categoria) obj;
-        if (this.id != other.id) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "Categoria{" + "id=" + id + ", nombre=" + nombre + '}';
+    public void setProductos(Set<Producto> productos) {
+        this.productos = productos;
     }
 }

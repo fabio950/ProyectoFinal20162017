@@ -22,4 +22,20 @@ public class ClienteDAO implements ClienteDAOLocal {
         cliente = em.find(Cliente.class, cliente.getId());
         return cliente;
     }
+    
+    @Override
+    public void addCliente(Cliente cliente) {
+        em.persist(cliente);
+    }
+    
+    @Override
+    public void updateCliente(Cliente cliente) {
+        em.merge(cliente);
+    }
+    
+    @Override
+    public void deleteCliente(Cliente cliente) {
+        cliente = findClienteById(cliente);
+        em.remove(cliente);
+    }
 }
