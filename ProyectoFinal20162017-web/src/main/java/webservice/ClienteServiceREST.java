@@ -34,7 +34,7 @@ public class ClienteServiceREST {
     @GET
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Cliente/FindById/{id}")
+    @Path("/Clientes/FindById/{id}")
     public Cliente findClienteById(@PathParam("id") int id) {
         Cliente c = new Cliente();
         c.setId(id);
@@ -45,7 +45,7 @@ public class ClienteServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Cliente/add")
+    @Path("/Clientes/add")
     public Response addCliente(Cliente cliente) {
         try {
             clienteService.addCliente(cliente);
@@ -59,7 +59,7 @@ public class ClienteServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Cliente/update/{id}")
+    @Path("/Clientes/update/{id}")
     public Response updateCliente(@PathParam("id") int id) {
         try {
             Cliente cliente = new Cliente();
@@ -75,7 +75,7 @@ public class ClienteServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Cliente/delete/{id}")
+    @Path("/Clientes/delete/{id}")
     public Response deleteCliente(@PathParam("id") int id) {
         try {
             Cliente cliente = new Cliente();

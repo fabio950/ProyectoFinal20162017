@@ -38,7 +38,7 @@ public class CategoriaServiceREST {
     @GET
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Categoria/FindById/{id}")
+    @Path("/Categorias/FindById/{id}")
     public Categoria findCategoriaById(@PathParam("id") int id) {
         Categoria categoria = new Categoria();
         categoria.setId(id);
@@ -49,7 +49,7 @@ public class CategoriaServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Categoria/add")
+    @Path("/Categorias/add")
     public Response addCategoria(Categoria categoria) {
         try {
             categoriaService.addCategoria(categoria);
@@ -63,7 +63,7 @@ public class CategoriaServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Categoria/update/{id}")
+    @Path("/Categorias/update/{id}")
     public Response updateCategoria(@PathParam("id") int id) {
         try {
             Categoria categoria = new Categoria();
@@ -79,9 +79,11 @@ public class CategoriaServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Categoria/delete")
-    public Response deleteCategoria(Categoria categoria) {
+    @Path("/Categorias/delete/{id}")
+    public Response deleteCategoria(@PathParam("id") int id) {
         try {
+            Categoria categoria = new Categoria();
+            categoria.setId(id);
             categoriaService.deleteCategoria(categoria);
             return Response.ok().entity(categoria).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         } catch (Exception ex) {

@@ -38,7 +38,7 @@ public class ProductoServiceREST {
     @GET
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Producto/FindById/{id}")
+    @Path("/Productos/FindById/{id}")
     public Producto findProductoById(@PathParam("id") int id){
         Producto producto = new Producto();
         producto.setId(id);
@@ -49,7 +49,7 @@ public class ProductoServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Producto/add")
+    @Path("/Productos/add")
     public Response addProducto(Producto producto) {
         try {
             productoService.addProducto(producto);
@@ -63,7 +63,7 @@ public class ProductoServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Producto/update/{id}")
+    @Path("/Productos/update/{id}")
     public Response updateProducto(@PathParam("id") int id) {
         try {
             Producto producto = new Producto();
@@ -79,7 +79,7 @@ public class ProductoServiceREST {
     @POST
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
-    @Path("/Producto/delete/{id}")
+    @Path("/Productos/delete/{id}")
     public Response deleteProducto(@PathParam("id") int id) {
         try {
             Producto producto = new Producto();
