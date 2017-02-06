@@ -60,7 +60,7 @@ public class CategoriaServiceREST {
         }
     }
     
-    @POST
+    @PUT
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Categorias/update/{id}")
@@ -76,7 +76,7 @@ public class CategoriaServiceREST {
         }
     }
     
-    @POST
+    @DELETE
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Categorias/delete/{id}")
