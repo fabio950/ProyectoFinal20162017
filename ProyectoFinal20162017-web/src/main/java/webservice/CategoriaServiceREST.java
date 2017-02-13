@@ -42,8 +42,7 @@ public class CategoriaServiceREST {
     public Categoria findCategoriaById(@PathParam("id") int id) {
         Categoria categoria = new Categoria();
         categoria.setId(id);
-        categoria = categoriaService.findCategoriaById(categoria);
-        return categoria;
+        return categoriaService.findCategoriaById(categoria);
     }
 
     @POST
@@ -64,12 +63,18 @@ public class CategoriaServiceREST {
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Categorias/update/{id}")
-    public Response updateCategoria(@PathParam("id") int id) {
+    public Response updateCategoria(@PathParam("id") int id, Categoria categoriaModificada) {
         try {
             Categoria categoria = new Categoria();
             categoria.setId(id);
-            categoriaService.updateCategoria(categoria);
-            return Response.ok().entity(categoria).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+            categoria = categoriaService.findCategoriaById(categoria);
+            if(categoria != null) {
+                categoria.setNombre(categoriaModificada.getNombre());
+                categoriaService.updateCategoria(categoria);
+                return Response.ok().entity(categoria).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();

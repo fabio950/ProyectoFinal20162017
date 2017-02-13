@@ -6,11 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,8 +34,7 @@ public class ClienteServiceREST {
     public Cliente findClienteById(@PathParam("id") int id) {
         Cliente c = new Cliente();
         c.setId(id);
-        c = clienteService.findClienteById(c);
-        return c;
+        return clienteService.findClienteById(c);
     }
     
     @POST
@@ -49,30 +44,43 @@ public class ClienteServiceREST {
     public Response addCliente(Cliente cliente) {
         try {
             clienteService.addCliente(cliente);
-            return Response.ok().entity(cliente).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+            return Response.ok().entity(cliente).build();
         } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         }
     }
     
-    @POST
+    @PUT
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Clientes/update/{id}")
-    public Response updateCliente(@PathParam("id") int id) {
+    public Response updateCliente(@PathParam("id") int id, Cliente clienteModificado) {
         try {
             Cliente cliente = new Cliente();
             cliente.setId(id);
-            clienteService.updateCliente(cliente);
-            return Response.ok().entity(cliente).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+            cliente = clienteService.findClienteById(cliente);
+            if(cliente != null) {
+                cliente.setNombre(clienteModificado.getNombre());
+                cliente.setApellidos(clienteModificado.getApellidos());
+                cliente.setNif(clienteModificado.getNif());
+                cliente.setDireccion(clienteModificado.getDireccion());
+                cliente.setPoblacion(clienteModificado.getPoblacion());
+                cliente.setProvincia(clienteModificado.getProvincia());
+                cliente.setCodigopostal(clienteModificado.getCodigopostal());
+                cliente.setTelefono(clienteModificado.getTelefono());
+                clienteService.updateCliente(cliente);
+                return Response.ok().entity(cliente).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         }
     }
     
-    @POST
+    @DELETE
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Clientes/delete/{id}")
@@ -81,7 +89,7 @@ public class ClienteServiceREST {
             Cliente cliente = new Cliente();
             cliente.setId(id);
             clienteService.deleteCliente(cliente);
-            return Response.ok().entity(cliente).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+            return Response.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();

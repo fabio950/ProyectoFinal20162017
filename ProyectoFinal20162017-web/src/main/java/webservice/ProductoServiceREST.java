@@ -24,14 +24,14 @@ import javax.ws.rs.core.Response;
 @Consumes("application/json;charset=UTF-8")
 @Stateless
 public class ProductoServiceREST {
-
+    
     @EJB
     private ProductoServiceLocal productoService;
     
     @GET
     @Produces("application/json;charset=UTF-8")
     @Path("/Productos")
-    public List<Producto> listProductos(){
+    public List<Producto> listProductos() {
         return productoService.listProductos();
     }
     
@@ -39,7 +39,7 @@ public class ProductoServiceREST {
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Productos/FindById/{id}")
-    public Producto findProductoById(@PathParam("id") int id){
+    public Producto findProductoById(@PathParam("id") int id) {
         Producto producto = new Producto();
         producto.setId(id);
         producto = productoService.findProductoById(producto);
@@ -54,29 +54,37 @@ public class ProductoServiceREST {
         try {
             productoService.addProducto(producto);
             return Response.ok().entity(producto).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         }
     }
     
-    @POST
+    @PUT
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Productos/update/{id}")
-    public Response updateProducto(@PathParam("id") int id) {
+    public Response updateProducto(@PathParam("id") int id, Producto productoModificado) {
         try {
             Producto producto = new Producto();
             producto.setId(id);
-            productoService.updateProducto(producto);
-            return Response.ok().entity(producto).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
-        } catch(Exception ex) {
+            producto = productoService.findProductoById(producto);
+            if (producto != null) {
+                producto.setNombre(productoModificado.getNombre());
+                producto.setPrecio(productoModificado.getPrecio());
+                producto.setCategoria(productoModificado.getCategoria());
+                productoService.updateProducto(producto);
+                return Response.ok().entity(producto).build();
+            } else {
+                return Response.status(Response.Status.NOT_FOUND).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         }
     }
     
-    @POST
+    @DELETE
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
     @Path("/Productos/delete/{id}")
@@ -85,8 +93,8 @@ public class ProductoServiceREST {
             Producto producto = new Producto();
             producto.setId(id);
             productoService.deleteProducto(producto);
-            return Response.ok().entity(producto).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
-        } catch(Exception ex) {
+            return Response.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
+        } catch (Exception ex) {
             ex.printStackTrace();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         }
