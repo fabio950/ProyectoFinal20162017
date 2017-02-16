@@ -8,12 +8,17 @@
         <servlet-name>ClienteController</servlet-name>
         <servlet-class>com.fpmislata.servlets.ClienteController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ProductoController</servlet-name>
+        <servlet-class>com.fpmislata.servlets.ProductoController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CategoriaController</servlet-name>
         <url-pattern>/ListarCategorias</url-pattern>
         <url-pattern>/AddCategoria</url-pattern>
         <url-pattern>/UpdateCategoria</url-pattern>
         <url-pattern>/DeleteCategoria</url-pattern>
+        <url-pattern>/ListarProductosPorCategoria</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ClienteController</servlet-name>
@@ -21,6 +26,13 @@
         <url-pattern>/AddCliente</url-pattern>
         <url-pattern>/DeleteCliente</url-pattern>
         <url-pattern>/UpdateCliente</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ProductoController</servlet-name>
+        <url-pattern>/ListarProductos</url-pattern>
+        <url-pattern>/AddProducto</url-pattern>
+        <url-pattern>/UpdateProducto</url-pattern>
+        <url-pattern>/DeleteProducto</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

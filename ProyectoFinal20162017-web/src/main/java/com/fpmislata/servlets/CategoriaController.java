@@ -6,12 +6,11 @@
 package com.fpmislata.servlets;
 
 import com.fpmislata.domain.Categoria;
+import com.fpmislata.domain.Producto;
 import com.fpmislata.service.CategoriaServiceLocal;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -29,11 +28,15 @@ import javax.servlet.http.HttpServletResponse;
         urlPatterns = {"/ListarCategorias",
             "/AddCategoria",
             "/DeleteCategoria",
-            "/UpdateCategoria"})
+            "/UpdateCategoria",
+            "/ListarProductosPorCategoria"})
 public class CategoriaController extends HttpServlet {
 
     @EJB
     private CategoriaServiceLocal categoriaService;
+
+    List lista;
+    ArrayList<Categoria> listCat;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,10 +52,8 @@ public class CategoriaController extends HttpServlet {
 
         String userPath = request.getServletPath();
 
-        // Si la operacion es listar personas
         if (userPath.equals("/ListarCategorias")) {
             listarCategorias(request, response);
-            // Si la operacion es Alta Categoria
         } else if (userPath.equals("/AddCategoria")) {
             altaCategoria(request, response);
             // Si la operacion es Eliminar Categoria
@@ -61,6 +62,8 @@ public class CategoriaController extends HttpServlet {
             // Si la operacion es Modificar Categoria
         } else if (userPath.equals("/UpdateCategoria")) {
             modificarCategoria(request, response);
+        } else if (userPath.equals("/ListarProductosPorCategoria")) {
+            listarProductosPorCategoria(request, response);
         }
     }
 
@@ -105,8 +108,8 @@ public class CategoriaController extends HttpServlet {
 
     private void listarCategorias(HttpServletRequest request, HttpServletResponse response) {
         try {
-            List lista = categoriaService.listCategorias();
-            ArrayList<Categoria> listCat = new ArrayList<>(lista);
+            lista = categoriaService.listCategorias();
+            listCat = new ArrayList<>(lista);
 
             request.getSession().setAttribute("listaCategorias", listCat);
             RequestDispatcher rd = request.getRequestDispatcher("/listarCategorias.jsp");
@@ -114,18 +117,100 @@ public class CategoriaController extends HttpServlet {
             rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
     }
 
     private void altaCategoria(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String nombre = request.getParameter("nombre");
+
+            Categoria c = new Categoria();
+            c.setNombre(nombre);
+
+            categoriaService.addCategoria(c);
+
+            lista = categoriaService.listCategorias();
+            listCat = new ArrayList<>(lista);
+
+            request.getSession().setAttribute("listaCategorias", listCat);
+            RequestDispatcher rd = request.getRequestDispatcher("/listarCategorias.jsp");
+            rd.forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void eliminarCategoria(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            Categoria c = new Categoria();
+            c.setId(id);
+
+            categoriaService.deleteCategoria(c);
+
+            lista = categoriaService.listCategorias();
+            listCat = new ArrayList<>(lista);
+
+            request.getSession().setAttribute("listaCategorias", listCat);
+            RequestDispatcher rd = request.getRequestDispatcher("/listarCategorias.jsp");
+            rd.forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void modificarCategoria(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            String accion = request.getParameter("accion");
+            
+            Categoria c = new Categoria();
+            
+            if (accion.equals("editar")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                
+                c.setId(id);
+                c = categoriaService.findCategoriaById(c);
+                
+                request.setAttribute("c", c);
+                request.getRequestDispatcher("/actualizarCategoria.jsp").forward(request, response);
+            } else if (accion.equals("actualizar")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String nombre = request.getParameter("nombre");
+
+                c.setId(id);
+                c = categoriaService.findCategoriaById(c);
+                c.setNombre(nombre);
+                
+                categoriaService.updateCategoria(c);
+
+                lista = categoriaService.listCategorias();
+                listCat = new ArrayList<>(lista);
+
+                request.getSession().setAttribute("listaCategorias", listCat);
+                RequestDispatcher rd = request.getRequestDispatcher("/listarCategorias.jsp");
+                rd.forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void listarProductosPorCategoria(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            Categoria c = new Categoria();
+            c.setId(id);
+            c = categoriaService.findCategoriaById(c);
+            
+            ArrayList<Producto> listPro = new ArrayList<>(c.getProductos());
+            
+            request.getSession().setAttribute("listaProductos", listPro);
+            RequestDispatcher rd = request.getRequestDispatcher("/listarProductos.jsp");
+            rd.forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
