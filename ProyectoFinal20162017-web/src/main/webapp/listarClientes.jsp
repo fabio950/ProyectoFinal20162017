@@ -21,42 +21,43 @@
                     <th>Nombre</th>
                     <th>Apellidos</th>
                     <th>NIF</th>
+                    <th>Teléfono</th>
+                    <th> --- </th>
                     <th>Dirección</th>
                     <th>Población</th>
                     <th>Provincia</th>
                     <th>CP</th>
-                    <th>Teléfono</th>
                     <th></th>
                     <th></th>
 		</tr>
-
                 <%
                 ArrayList<Cliente> lista = (ArrayList) session.getAttribute("listaClientes");
                 for(Cliente cliente : lista){
                     
                     int id = cliente.getId();
                     String nombre = cliente.getNombre();
-                    String apellido = cliente.getApellidos();
+                    String apellidos = cliente.getApellidos();
                     String nif = cliente.getNif();
-                    String direccion = cliente.getDireccion();
-                    String poblacion = cliente.getPoblacion();
-                    String provincia = cliente.getProvincia();
-                    String codigopostal = cliente.getCodigopostal();
+                    String direccion = cliente.getDireccion().getDireccion();
+                    String poblacion = cliente.getDireccion().getPoblacion();
+                    String provincia = cliente.getDireccion().getProvincia();
+                    String codigopostal = cliente.getDireccion().getCodigopostal();
                     String telefono = cliente.getTelefono();
 
                 %>                
 		<tr>
-                    <td><%=id%></a></td>
+                    <td><%=id%></td>
                     <td><%=nombre%></td>
-                    <td><%=apellido%></td>
+                    <td><%=apellidos%></td>
                     <td><%=nif%></td>
+                    <td><%=telefono%></td>
+                    <td></td>
                     <td><%=direccion%></td>
                     <td><%=poblacion%></td>
                     <td><%=provincia%></td>
                     <td><%=codigopostal%></td>
-                    <td><%=telefono%></td>
-                    <td><a href="ModificarCliente?accion=editar&id=<%=id%>">Modificar</td>
-                    <td><a href="EliminarCliente?id=<%=id%>">Eliminar</a></td>
+                    <td><a href="UpdateCliente?accion=editar&id=<%=id%>">Modificar</a></td>
+                    <td><a href="DeleteCliente?id=<%=id%>">Eliminar</a></td>
                 </tr>
                 <% } %>
 	</table>

@@ -27,7 +27,7 @@
                     String nombre = categoria.getNombre();
             %>                
             <tr>
-                <td><%=id%></a></td>
+                <td><%=id%></td>
                 <td><%=nombre%></td>
                 <td><a href="UpdateCategoria?accion=editar&id=<%=id%>">Modificar</a></td>
                 <td><a href="DeleteCategoria?id=<%=id%>">Eliminar</a></td>

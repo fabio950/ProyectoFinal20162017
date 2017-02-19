@@ -4,6 +4,7 @@
         <a href="ListarCategorias">Listado de Categorías</a>
         <br>
         <a href="ListarProductos">Listado de Productos</a>
-        <br>        
+        <br>
+        <a href="ListarClientes">Listado de Clientes</a>
     </body>
 </html>

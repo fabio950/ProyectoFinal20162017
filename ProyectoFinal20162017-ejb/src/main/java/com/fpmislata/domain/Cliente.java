@@ -1,6 +1,8 @@
 package com.fpmislata.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
@@ -29,33 +31,30 @@ public class Cliente implements Serializable {
     @Column(nullable = false, length = 9)
     private String nif;
 
-    @Column(length = 100)
-    private String direccion;
-
-    @Column(length = 100)
-    private String poblacion;
-
-    @Column(length = 100)
-    private String provincia;
-
-    @Column(length = 5)
-    private String codigopostal;
-
     @Column(nullable = false, length = 9)
     private String telefono;
 
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "direccion")
+    private Direccion direccion;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinTable(name = "clientes_productos",
+            joinColumns = @JoinColumn(name = "id_cliente"),
+            inverseJoinColumns = @JoinColumn(name = "id_producto"))
+    private Set<Producto> productos;
+
     public Cliente() {
+        this.productos = new HashSet<>();
     }
 
-    public Cliente(String nombre, String apellidos, String nif, String direccion, String poblacion, String provincia, String codigopostal, String telefono) {
+    public Cliente(String nombre, String apellidos, String nif, String telefono, Direccion direccion) {
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.nif = nif;
-        this.direccion = direccion;
-        this.poblacion = poblacion;
-        this.provincia = provincia;
-        this.codigopostal = codigopostal;
         this.telefono = telefono;
+        this.direccion = direccion;
+        this.productos = new HashSet<>();
     }
 
     public int getId() {
@@ -90,44 +89,28 @@ public class Cliente implements Serializable {
         this.nif = nif;
     }
 
-    public String getDireccion() {
-        return direccion;
-    }
-
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
-    }
-
-    public String getPoblacion() {
-        return poblacion;
-    }
-
-    public void setPoblacion(String poblacion) {
-        this.poblacion = poblacion;
-    }
-
-    public String getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(String provincia) {
-        this.provincia = provincia;
-    }
-
-    public String getCodigopostal() {
-        return codigopostal;
-    }
-
-    public void setCodigopostal(String codigopostal) {
-        this.codigopostal = codigopostal;
-    }
-
     public String getTelefono() {
         return telefono;
     }
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
+    public Set<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(Set<Producto> productos) {
+        this.productos = productos;
     }
 
     @Override
@@ -157,6 +140,6 @@ public class Cliente implements Serializable {
 
     @Override
     public String toString() {
-        return "Cliente{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", nif=" + nif + ", direccion=" + direccion + ", poblacion=" + poblacion + ", provincia=" + provincia + ", codigopostal=" + codigopostal + ", telefono=" + telefono + '}';
+        return "Cliente{" + "id=" + id + ", nombre=" + nombre + ", apellidos=" + apellidos + ", nif=" + nif + ", telefono=" + telefono + '}';
     }
 }

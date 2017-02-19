@@ -6,6 +6,8 @@
 package com.fpmislata.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 
@@ -40,13 +42,18 @@ public class Producto implements Serializable {
     @XmlTransient
     private Categoria categoria;
 
+    @ManyToMany(cascade = {CascadeType.ALL}, mappedBy="productos")
+    private Set<Cliente> clientes;
+    
     public Producto() {
+        this.clientes = new HashSet<>();
     }
 
     public Producto(String nombre, Float precio, Categoria categoria) {
         this.nombre = nombre;
         this.precio = precio;
         this.categoria = categoria;
+        this.clientes = new HashSet<>();
     }
 
     public int getId() {
@@ -79,6 +86,14 @@ public class Producto implements Serializable {
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
+    }
+
+    public Set<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(Set<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
     @Override

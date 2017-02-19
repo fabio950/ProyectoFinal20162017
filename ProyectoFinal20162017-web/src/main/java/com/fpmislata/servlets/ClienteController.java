@@ -7,6 +7,7 @@ package com.fpmislata.servlets;
 
 import com.fpmislata.domain.Categoria;
 import com.fpmislata.domain.Cliente;
+import com.fpmislata.domain.Direccion;
 import com.fpmislata.service.ClienteServiceLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,7 +35,7 @@ public class ClienteController extends HttpServlet {
 
     @EJB
     private ClienteServiceLocal clienteService;
-    
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -51,6 +52,12 @@ public class ClienteController extends HttpServlet {
         // Si la operacion es listar personas
         if (userPath.equals("/ListarClientes")) {
             listarClientes(request, response);
+        } else if (userPath.equals("/AddCliente")) {
+            altaCliente(request, response);
+        } else if (userPath.equals("/DeleteCliente")) {
+            eliminarCliente(request, response);
+        } else if (userPath.equals("/UpdateCliente")) {
+            modificarCliente(request, response);
         }
     }
 
@@ -104,6 +111,105 @@ public class ClienteController extends HttpServlet {
             rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-        } 
+        }
+    }
+
+    private void altaCliente(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String nombre = request.getParameter("nombre");
+            String apellidos = request.getParameter("apellidos");
+            String nif = request.getParameter("nif");
+            String telefono = request.getParameter("telefono");
+            String direccion = request.getParameter("direccion");
+            String poblacion = request.getParameter("poblacion");
+            String provincia = request.getParameter("provincia");
+            String cp = request.getParameter("cp");
+
+            Cliente c = new Cliente();
+            c.setNombre(nombre);
+            c.setApellidos(apellidos);
+            c.setNif(nif);
+            c.setTelefono(telefono);
+
+            Direccion d = new Direccion();
+            d.setDireccion(direccion);
+            d.setPoblacion(poblacion);
+            d.setProvincia(provincia);
+            d.setCodigopostal(cp);
+
+            c.setDireccion(d);
+
+            clienteService.addCliente(c);
+
+            listarClientes(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void modificarCliente(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String accion = request.getParameter("accion");
+
+            Cliente c = new Cliente();
+
+            if (accion.equals("editar")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+
+                c.setId(id);
+
+                c = clienteService.findClienteById(c);
+
+                request.setAttribute("c", c);
+                request.getRequestDispatcher("/actualizarCliente.jsp").forward(request, response);
+            } else if (accion.equals("actualizar")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String nombre = request.getParameter("nombre");
+                String apellidos = request.getParameter("apellidos");
+                String nif = request.getParameter("nif");
+                String telefono = request.getParameter("telefono");
+                String direccion = request.getParameter("direccion");
+                String poblacion = request.getParameter("poblacion");
+                String provincia = request.getParameter("provincia");
+                String cp = request.getParameter("cp");
+
+                c.setId(id);
+                c = clienteService.findClienteById(c);
+
+                c.setNombre(nombre);
+                c.setApellidos(apellidos);
+                c.setNif(nif);
+                c.setTelefono(telefono);
+
+                Direccion d = new Direccion();
+                d.setDireccion(direccion);
+                d.setPoblacion(poblacion);
+                d.setProvincia(provincia);
+                d.setCodigopostal(cp);
+
+                c.setDireccion(d);
+                
+                clienteService.updateCliente(c);
+                
+                listarClientes(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void eliminarCliente(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+
+            Cliente c = new Cliente();
+            c.setId(id);
+
+            clienteService.deleteCliente(c);
+
+            listarClientes(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

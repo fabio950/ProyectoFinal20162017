@@ -37,7 +37,7 @@
                     String categoria = producto.getCategoria().getNombre();
             %>                
             <tr>
-                <td><%=id%></a></td>
+                <td><%=id%></td>
                 <td><%=nombre%></td>
                 <td><%=precio%></td>
                 <td><%=categoria%></td>
