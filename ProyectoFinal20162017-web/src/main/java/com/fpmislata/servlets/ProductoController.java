@@ -9,11 +9,12 @@ import com.fpmislata.domain.Categoria;
 import com.fpmislata.domain.Cliente;
 import com.fpmislata.domain.Producto;
 import com.fpmislata.service.CategoriaServiceLocal;
+import com.fpmislata.service.ClienteServiceLocal;
 import com.fpmislata.service.ProductoServiceLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -34,6 +35,9 @@ import javax.servlet.http.HttpServletResponse;
             "/UpdateProducto",
             "/ListarClientesPorProducto"})
 public class ProductoController extends HttpServlet {
+
+    @EJB
+    private ClienteServiceLocal clienteService;
 
     @EJB
     private CategoriaServiceLocal categoriaService;
@@ -118,8 +122,12 @@ public class ProductoController extends HttpServlet {
             List listarCat = categoriaService.listCategorias();
             ArrayList<Categoria> listCat = new ArrayList<>(listarCat);
 
+            List lista2 = clienteService.listClientes();
+            ArrayList<Cliente> listCli = new ArrayList<>(lista2);
+            
             request.getSession().setAttribute("listaCategorias", listCat);
             request.getSession().setAttribute("listaProductos", listPro);
+            request.getSession().setAttribute("listaClientes", listCli);
             RequestDispatcher rd = request.getRequestDispatcher("/listarProductos.jsp");
 
             rd.forward(request, response);
@@ -158,14 +166,35 @@ public class ProductoController extends HttpServlet {
         }
     }
 
-    private void eliminarProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    private void eliminarProducto(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            Producto p = new Producto();
+            p.setId(id);
+            
+            p = productoService.findProductoById(p);
+            
+            Set listaC = p.getClientes();
+            ArrayList<Cliente> clientes = new ArrayList<>(listaC);
+            
+            for(Cliente c : clientes) {
+                c.getProductos().remove(p);
+                clienteService.updateCliente(c);
+            }
+            
+            productoService.deleteProducto(p);
+            
+            listarProductos(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     private void listarClientesPorProducto(HttpServletRequest request, HttpServletResponse response) {
         try {
             int id = Integer.parseInt(request.getParameter("id"));

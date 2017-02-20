@@ -5,16 +5,15 @@
  */
 package com.fpmislata.servlets;
 
-import com.fpmislata.domain.Categoria;
 import com.fpmislata.domain.Cliente;
 import com.fpmislata.domain.Direccion;
 import com.fpmislata.domain.Producto;
 import com.fpmislata.service.ClienteServiceLocal;
 import com.fpmislata.service.ProductoServiceLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -217,6 +216,16 @@ public class ClienteController extends HttpServlet {
             Cliente c = new Cliente();
             c.setId(id);
 
+            c = clienteService.findClienteById(c);
+            
+            Set lista = c.getProductos();
+            ArrayList<Producto> productos = new ArrayList<>(lista);
+            
+            for(Producto p : productos) {
+                p.getClientes().remove(c);
+                productoService.updateProducto(p);
+            }
+            
             clienteService.deleteCliente(c);
 
             listarClientes(request, response);
