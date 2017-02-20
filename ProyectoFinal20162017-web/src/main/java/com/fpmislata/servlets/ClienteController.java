@@ -113,7 +113,11 @@ public class ClienteController extends HttpServlet {
             List lista = clienteService.listClientes();
             ArrayList<Cliente> listCli = new ArrayList<>(lista);
 
+            List lista2 = productoService.listProductos();
+            ArrayList<Producto> listPro = new ArrayList<>(lista2);
+            
             request.getSession().setAttribute("listaClientes", listCli);
+            request.getSession().setAttribute("listaProductos", listPro);
             RequestDispatcher rd = request.getRequestDispatcher("/listarClientes.jsp");
 
             rd.forward(request, response);
