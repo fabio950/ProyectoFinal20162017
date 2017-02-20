@@ -8,7 +8,9 @@ package com.fpmislata.servlets;
 import com.fpmislata.domain.Categoria;
 import com.fpmislata.domain.Cliente;
 import com.fpmislata.domain.Direccion;
+import com.fpmislata.domain.Producto;
 import com.fpmislata.service.ClienteServiceLocal;
+import com.fpmislata.service.ProductoServiceLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -30,8 +32,12 @@ import javax.servlet.http.HttpServletResponse;
         urlPatterns = {"/ListarClientes",
             "/AddCliente",
             "/DeleteCliente",
-            "/UpdateCliente"})
+            "/UpdateCliente",
+            "/ListarProductosPorCliente"})
 public class ClienteController extends HttpServlet {
+
+    @EJB
+    private ProductoServiceLocal productoService;
 
     @EJB
     private ClienteServiceLocal clienteService;
@@ -58,6 +64,8 @@ public class ClienteController extends HttpServlet {
             eliminarCliente(request, response);
         } else if (userPath.equals("/UpdateCliente")) {
             modificarCliente(request, response);
+        } else if (userPath.equals("/ListarProductosPorCliente")) {
+            listarProductosPorCliente(request, response);
         }
     }
 
@@ -208,6 +216,24 @@ public class ClienteController extends HttpServlet {
             clienteService.deleteCliente(c);
 
             listarClientes(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void listarProductosPorCliente(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            Cliente c = new Cliente();
+            c.setId(id);
+            c = clienteService.findClienteById(c);
+            
+            ArrayList<Producto> listPro = new ArrayList<>(c.getProductos());
+            
+            request.getSession().setAttribute("listaProductos", listPro);
+            RequestDispatcher rd = request.getRequestDispatcher("/listarProductos.jsp");
+            rd.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }

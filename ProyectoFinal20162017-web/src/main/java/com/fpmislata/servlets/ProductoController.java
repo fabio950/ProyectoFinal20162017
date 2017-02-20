@@ -6,6 +6,7 @@
 package com.fpmislata.servlets;
 
 import com.fpmislata.domain.Categoria;
+import com.fpmislata.domain.Cliente;
 import com.fpmislata.domain.Producto;
 import com.fpmislata.service.CategoriaServiceLocal;
 import com.fpmislata.service.ProductoServiceLocal;
@@ -30,7 +31,8 @@ import javax.servlet.http.HttpServletResponse;
         urlPatterns = {"/ListarProductos",
             "/AddProducto",
             "/DeleteProducto",
-            "/UpdateProducto"})
+            "/UpdateProducto",
+            "/ListarClientesPorProducto"})
 public class ProductoController extends HttpServlet {
 
     @EJB
@@ -64,6 +66,8 @@ public class ProductoController extends HttpServlet {
             // Si la operacion es Modificar Categoria
         } else if (userPath.equals("/UpdateCategoria")) {
             modificarProducto(request, response);
+        } else if (userPath.equals("/ListarClientesPorProducto")) {
+            listarClientesPorProducto(request, response);
         }
     }
 
@@ -160,6 +164,24 @@ public class ProductoController extends HttpServlet {
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    private void listarClientesPorProducto(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
+            
+            Producto p = new Producto();
+            p.setId(id);
+            p = productoService.findProductoById(p);
+            
+            ArrayList<Cliente> listCli = new ArrayList<>(p.getClientes());
+            
+            request.getSession().setAttribute("listaClientes", listCli);
+            RequestDispatcher rd = request.getRequestDispatcher("/listarClientes.jsp");
+            rd.forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

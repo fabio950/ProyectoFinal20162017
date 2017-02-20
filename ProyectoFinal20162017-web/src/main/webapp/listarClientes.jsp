@@ -29,6 +29,7 @@
                     <th>CP</th>
                     <th></th>
                     <th></th>
+                    <th></th>
 		</tr>
                 <%
                 ArrayList<Cliente> lista = (ArrayList) session.getAttribute("listaClientes");
@@ -58,6 +59,7 @@
                     <td><%=codigopostal%></td>
                     <td><a href="UpdateCliente?accion=editar&id=<%=id%>">Modificar</a></td>
                     <td><a href="DeleteCliente?id=<%=id%>">Eliminar</a></td>
+                    <td><a href="ListarProductosPorCliente?id=<%=id%>">Visualizar productos</a></td>
                 </tr>
                 <% } %>
 	</table>

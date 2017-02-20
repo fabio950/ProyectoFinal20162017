@@ -26,6 +26,7 @@
         <url-pattern>/AddCliente</url-pattern>
         <url-pattern>/DeleteCliente</url-pattern>
         <url-pattern>/UpdateCliente</url-pattern>
+        <url-pattern>/ListarProductosPorCliente</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductoController</servlet-name>
@@ -33,6 +34,7 @@
         <url-pattern>/AddProducto</url-pattern>
         <url-pattern>/UpdateProducto</url-pattern>
         <url-pattern>/DeleteProducto</url-pattern>
+        <url-pattern>/ListarClientesPorProducto</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

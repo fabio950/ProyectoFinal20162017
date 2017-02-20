@@ -51,6 +51,7 @@ public class ClienteServiceREST {
         }
     }
     
+    /*
     @PUT
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")
@@ -79,7 +80,8 @@ public class ClienteServiceREST {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_TYPE.withCharset("UTF-8")).build();
         }
     }
-    
+    **/
+
     @DELETE
     @Produces("application/json;charset=UTF-8")
     @Consumes("application/json;charset=UTF-8")

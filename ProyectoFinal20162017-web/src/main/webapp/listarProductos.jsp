@@ -27,6 +27,7 @@
                 <th>Categoría</th>
                 <th></th>
                 <th></th>
+                <th></th>
             </tr>
             <%
                 ArrayList<Producto> lista = (ArrayList) session.getAttribute("listaProductos");
@@ -43,6 +44,7 @@
                 <td><%=categoria%></td>
                 <td><a href="UpdateCategoria?accion=editar&id=<%=id%>">Modificar</a></td>
                 <td><a href="DeleteCategoria?id=<%=id%>">Eliminar</a></td>
+                <td><a href="ListarClientesPorProducto?id=<%=id%>">Visualizar clientes</a></td>
             </tr>
             <% }%>
         </table>

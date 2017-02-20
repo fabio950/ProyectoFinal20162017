@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Añadir Cliente</h1>
-        <form action="AddCategoria" method="post">
+        <form action="AddCliente" method="post">
 		<label for="nombre">Nombre:</label>
 		<input type="text" name="nombre" style="display: block;" />
                 <label for="apellidos">Apellidos:</label>
