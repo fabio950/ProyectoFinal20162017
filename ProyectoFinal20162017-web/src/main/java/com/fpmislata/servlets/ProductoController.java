@@ -141,7 +141,8 @@ public class ProductoController extends HttpServlet {
             String nombre = request.getParameter("nombre");
             Float precio = Float.parseFloat(request.getParameter("precio"));
             int idCat = Integer.parseInt(request.getParameter("categoria"));
-
+            String[] clientes = request.getParameterValues("clientes");
+            
             Producto p = new Producto();
             p.setNombre(nombre);
             p.setPrecio(precio);
@@ -153,6 +154,20 @@ public class ProductoController extends HttpServlet {
             p.setCategoria(c);
 
             productoService.addProducto(p);
+            
+            if(clientes != null) {
+                Cliente cli;
+                for(String idCli : clientes) {
+                    cli = new Cliente();
+                    int idCliente = Integer.parseInt(idCli);
+                    cli.setId(idCliente);
+                    cli = clienteService.findClienteById(cli);
+                    cli.getProductos().add(p);
+                    p.getClientes().add(cli);
+                    
+                    clienteService.updateCliente(cli);
+                }
+            }
 
             lista = productoService.listProductos();
             listPro = new ArrayList<>(lista);
@@ -167,7 +182,11 @@ public class ProductoController extends HttpServlet {
     }
 
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void eliminarProducto(HttpServletRequest request, HttpServletResponse response) {
@@ -212,5 +231,4 @@ public class ProductoController extends HttpServlet {
             e.printStackTrace();
         }
     }
-
 }

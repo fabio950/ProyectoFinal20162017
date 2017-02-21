@@ -42,8 +42,8 @@
                 <td><%=nombre%></td>
                 <td><%=precio%></td>
                 <td><%=categoria%></td>
-                <td><a href="UpdateCategoria?accion=editar&id=<%=id%>">Modificar</a></td>
-                <td><a href="DeleteCategoria?id=<%=id%>">Eliminar</a></td>
+                <td><a href="UpdateProducto?accion=editar&id=<%=id%>">Modificar</a></td>
+                <td><a href="DeleteProducto?id=<%=id%>">Eliminar</a></td>
                 <td><a href="ListarClientesPorProducto?id=<%=id%>">Visualizar clientes</a></td>
             </tr>
             <% }%>

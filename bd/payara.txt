@@ -1,0 +1,16 @@
+proyectofinal20162017bd
+
+datasourceName: com.mysql.jdbc.Driver
+databaseName: proyecto
+DatabaseName: proyecto
+user: user-proyecto
+User: user-proyecto
+Url: jdbc:mysql://localhost:3306/proyecto
+URL: jdbc:mysql://localhost:3306/proyecto
+serverName: localhost
+ServerName: localhost
+port: 3306
+Port: 3306
+PortNumber: 3306
+Password: 12345
+password: 12345

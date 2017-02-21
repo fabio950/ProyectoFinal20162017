@@ -135,7 +135,8 @@ public class ClienteController extends HttpServlet {
             String poblacion = request.getParameter("poblacion");
             String provincia = request.getParameter("provincia");
             String cp = request.getParameter("cp");
-
+            String[] productos = request.getParameterValues("productos");
+            
             Cliente c = new Cliente();
             c.setNombre(nombre);
             c.setApellidos(apellidos);
@@ -151,7 +152,21 @@ public class ClienteController extends HttpServlet {
             c.setDireccion(d);
 
             clienteService.addCliente(c);
-
+            
+            if(productos != null) {
+                Producto p;
+                for(String idPro : productos) {
+                    p = new Producto();
+                    int idProducto = Integer.parseInt(idPro);
+                    p.setId(idProducto);
+                    p = productoService.findProductoById(p);
+                    p.getClientes().add(c);
+                    c.getProductos().add(p);
+                    
+                    productoService.updateProducto(p);
+                }    
+            }
+            
             listarClientes(request, response);
         } catch (Exception e) {
             e.printStackTrace();
