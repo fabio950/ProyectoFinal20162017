@@ -65,10 +65,9 @@ public class ProductoController extends HttpServlet {
             listarProductos(request, response);
         } else if (userPath.equals("/AddProducto")) {
             altaProducto(request, response);
-        } else if (userPath.equals("/DeleteCategoria")) {
+        } else if (userPath.equals("/DeleteProducto")) {
             eliminarProducto(request, response);
-            // Si la operacion es Modificar Categoria
-        } else if (userPath.equals("/UpdateCategoria")) {
+        } else if (userPath.equals("/UpdateProducto")) {
             modificarProducto(request, response);
         } else if (userPath.equals("/ListarClientesPorProducto")) {
             listarClientesPorProducto(request, response);
@@ -181,9 +180,49 @@ public class ProductoController extends HttpServlet {
         }
     }
 
+    //No funciona bien del todo por la relacion del ManyToMany :(
     private void modificarProducto(HttpServletRequest request, HttpServletResponse response) {
         try {
+            String accion = request.getParameter("accion");
             
+            Producto p = new Producto();
+            
+            if(accion.equals("editar")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                
+                p.setId(id);
+                
+                p = productoService.findProductoById(p);
+                
+                request.setAttribute("p", p);
+                request.getRequestDispatcher("/actualizarProducto.jsp").forward(request, response);
+            } else if (accion.equals("actualizar")) {
+                int id = Integer.parseInt(request.getParameter("id"));
+                String nombre = request.getParameter("nombre");
+                Float precio = Float.parseFloat(request.getParameter("precio"));
+                int idCat = Integer.parseInt(request.getParameter("categoria"));
+                
+                p.setId(id);
+                
+                p = productoService.findProductoById(p);
+                
+                p.setNombre(nombre);
+                p.setPrecio(precio);
+                
+                Categoria cat = new Categoria();
+                cat.setId(idCat);
+                cat = categoriaService.findCategoriaById(cat);
+                Categoria catAnt = p.getCategoria();
+                p.getCategoria().getProductos().remove(p);
+                p.setCategoria(cat);
+                cat.getProductos().add(p);
+                
+                productoService.updateProducto(p);
+                categoriaService.updateCategoria(catAnt);
+                categoriaService.updateCategoria(cat);
+                
+                listarProductos(request, response);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,6 +237,9 @@ public class ProductoController extends HttpServlet {
             
             p = productoService.findProductoById(p);
             
+            Categoria cat = p.getCategoria();
+            p.getCategoria().getProductos().remove(p);
+            
             Set listaC = p.getClientes();
             ArrayList<Cliente> clientes = new ArrayList<>(listaC);
             
@@ -207,6 +249,8 @@ public class ProductoController extends HttpServlet {
             }
             
             productoService.deleteProducto(p);
+            
+            categoriaService.updateCategoria(cat);
             
             listarProductos(request, response);
         } catch (Exception e) {

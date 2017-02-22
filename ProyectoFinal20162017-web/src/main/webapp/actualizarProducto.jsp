@@ -11,15 +11,16 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Añadir Producto</title>
+        <title>Actualizar Producto</title>
     </head>
     <body>
-        <h1>Añadir Producto</h1>
-        <form action="AddProducto" method="post">
+        <h1>Actualizar Producto</h1>
+        <form action="UpdateProducto?accion=actualizar" method="post">
+            <input type="hidden" name="id" value="${p.getId()}"/>
             <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" style="display: block;" />
+            <input type="text" name="nombre" style="display: block;" value="${p.getNombre()}"/>
             <label for="precio">Precio:</label>
-            <input type="text" name="precio" style="display: block;" />
+            <input type="text" name="precio" style="display: block;" value="${p.getPrecio()}"/>
             <label for="categoria">Zona:</label>
             <select name="categoria" style="display: block;">
                 <%
